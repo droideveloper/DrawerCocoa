@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
-MVI architecture implementation basic and needs for iOS framework to create valid applications for swift 4.2
+ DrawerCocoa for iOS to have valid NacigationDrawer of Android in swift 4.2
                    DESC
 
   s.homepage     = "http://EXAMPLE/DrawerCocoa"
@@ -134,10 +134,5 @@ MVI architecture implementation basic and needs for iOS framework to create vali
   # s.requires_arc = true
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
-  # s.dependency "RxSwift", "~> 4.0"
-  # s.dependency "RxCocoa", "~> 4.0"
-  # s.dependency "Alamofire", "~> 4.7"
-  # s.dependency "AlamofireImage", "~> 3.4"
-  # s.dependency "Swinject"	
 
 end
