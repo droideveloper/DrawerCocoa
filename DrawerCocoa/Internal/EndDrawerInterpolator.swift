@@ -13,7 +13,7 @@ open class EndDrawerInterpoaltor: DrawerInterpolator {
 	
 	private let lowerBound: CGFloat
 	private let upperBound: CGFloat
-	private let drawerFrame: CGRect
+	private let width: CGFloat
 	
 	private let navigationView: UIView
 	private let overlayView: UIView
@@ -22,10 +22,10 @@ open class EndDrawerInterpoaltor: DrawerInterpolator {
 	
 	var drawerDelegate: DrawerDelegate? = nil
 	
-	init(lowerBound: CGFloat = 0, upperBound: CGFloat = 1, drawerFrame: CGRect = .zero, navigationView: UIView, overlayView: UIView) {
+	init(lowerBound: CGFloat = 0, upperBound: CGFloat = 1, navigationView: UIView, overlayView: UIView) {
 		self.lowerBound = lowerBound
 		self.upperBound = upperBound
-		self.drawerFrame = drawerFrame
+		self.width = navigationView.bounds.width
 		self.navigationView = navigationView
 		self.overlayView = overlayView
 		
@@ -41,7 +41,7 @@ open class EndDrawerInterpoaltor: DrawerInterpolator {
 			// translate alpha
 			overlayView.alpha = p
 			// translate view
-			navigationView.transform = CGAffineTransform(translationX: drawerFrame.width * t, y: 0)
+			navigationView.transform = CGAffineTransform(translationX: width * t, y: 0)
 			// change state
 			drawerState = .draging
 			// will notify my drawer
@@ -57,7 +57,7 @@ open class EndDrawerInterpoaltor: DrawerInterpolator {
 	
 	private func interpolateInternal(_ sender: UIPanGestureRecognizer) -> CGFloat {
 		let translation = sender.translation(in: nil)
-		let factor = translation.x / drawerFrame.width
+		let factor = translation.x / width
 		
 		let t = factor < 0 ? factor + 1: factor
 		return max(lowerBound, min(upperBound, t))
@@ -77,7 +77,7 @@ open class EndDrawerInterpoaltor: DrawerInterpolator {
 	
 	private func animate(_ state: DrawerState) {
 		if state == .closed || state == .opened {
-			let t = state == .closed ? drawerFrame.width : 0
+			let t = state == .closed ? width : 0
 			let p: CGFloat = state == .closed ? 0 : 1
 			
 			UIView.animate(withDuration: 0.3, animations: {
