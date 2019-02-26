@@ -51,17 +51,18 @@ open class DrawerController: UIViewController {
 		overlayView.alpha = 0
 		// add navigation
 		addChild(navigationViewController)
-		let halfWidth = self.view.bounds.width / 2
+		let width = self.view.bounds.width
+		let halfWidth = width / 2
 		let height = self.view.bounds.height
 		if drawerGravity == .start {
 			navigationViewController.view.bounds = CGRect(x: 0, y: 0, width: halfWidth, height: height)
-			navigationViewController.view.transform = CGAffineTransform(translationX: -halfWidth, y: 0)
+			navigationViewController.view.transform = CGAffineTransform(translationX: -width, y: 0)
 			let inter = StartDrawerInterpoaltor(drawerFrame: navigationViewController.view.frame, navigationView: navigationViewController.view, overlayView: overlayView)
 			inter.drawerDelegate = drawerDelegate
 			interpolator = inter
 		} else {
 			navigationViewController.view.bounds = CGRect(x: halfWidth, y: 0, width: halfWidth, height: height)
-			navigationViewController.view.transform = CGAffineTransform(translationX: halfWidth, y: 0)
+			navigationViewController.view.transform = CGAffineTransform(translationX: width, y: 0)
 			let inter = EndDrawerInterpoaltor(drawerFrame: navigationViewController.view.frame, navigationView: navigationViewController.view, overlayView: overlayView)
 			inter.drawerDelegate = drawerDelegate
 			interpolator = inter
