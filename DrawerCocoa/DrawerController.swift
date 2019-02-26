@@ -11,11 +11,11 @@ import UIKit
 
 open class DrawerController: UIViewController {
 	
-	var navigationViewController: UIViewController? = nil
-	var contentViewController: UIViewController? = nil
-	var drawerGravity: DrawerGravity = .start
+	open var navigationViewController: UIViewController? = nil
+	open var contentViewController: UIViewController? = nil
+	open var drawerGravity: DrawerGravity = .start
 	
-	var drawerDelegate: DrawerDelegate? = nil
+	open var drawerDelegate: DrawerDelegate? = nil
 
 	private lazy var overlayView: UIView = {
 		return UIView(frame: self.view.frame)
