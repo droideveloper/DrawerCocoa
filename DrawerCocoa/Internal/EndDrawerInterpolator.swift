@@ -13,7 +13,7 @@ open class EndDrawerInterpoaltor: DrawerInterpolator {
 	
 	private let lowerBound: CGFloat
 	private let upperBound: CGFloat
-	private let drawerFrame: CGSize
+	private let drawerFrame: CGRect
 	
 	private let navigationView: UIView
 	private let overlayView: UIView
@@ -22,7 +22,7 @@ open class EndDrawerInterpoaltor: DrawerInterpolator {
 	
 	var drawerDelegate: DrawerDelegate? = nil
 	
-	init(lowerBound: CGFloat = 0, upperBound: CGFloat = 1, drawerFrame: CGSize = .zero, navigationView: UIView, overlayView: UIView) {
+	init(lowerBound: CGFloat = 0, upperBound: CGFloat = 1, drawerFrame: CGRect = .zero, navigationView: UIView, overlayView: UIView) {
 		self.lowerBound = lowerBound
 		self.upperBound = upperBound
 		self.drawerFrame = drawerFrame
