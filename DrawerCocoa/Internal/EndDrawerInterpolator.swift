@@ -28,6 +28,9 @@ open class EndDrawerInterpoaltor: DrawerInterpolator {
 		self.drawerFrame = drawerFrame
 		self.navigationView = navigationView
 		self.overlayView = overlayView
+		
+		let tap = UITapGestureRecognizer(target: self, action: #selector(self.tap(_ :)))
+		self.overlayView.addGestureRecognizer(tap)
 	}
 	
 	public func interpolate(_ sender: UIPanGestureRecognizer) {
@@ -84,6 +87,12 @@ open class EndDrawerInterpoaltor: DrawerInterpolator {
 				self.drawerState = state
 				self.drawerDelegate?.drawerState(state, p)
 			}
+		}
+	}
+	
+	@objc private func tap(_ sender: UITapGestureRecognizer) {
+		if drawerState == .opened {
+			animate(.closed)
 		}
 	}
 }
