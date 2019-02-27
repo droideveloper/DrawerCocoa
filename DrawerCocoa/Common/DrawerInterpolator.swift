@@ -11,4 +11,5 @@ import UIKit
 
 public protocol DrawerInterpolator {	
 	func interpolate(_ sender: UIPanGestureRecognizer)
+	func animate(_ state: DrawerState)
 }

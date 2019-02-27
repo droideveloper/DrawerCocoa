@@ -13,7 +13,6 @@ open class EndDrawerInterpoaltor: DrawerInterpolator {
 	
 	private let lowerBound: CGFloat
 	private let upperBound: CGFloat
-	private let width: CGFloat
 	
 	private let navigationView: UIView
 	private let overlayView: UIView
@@ -25,7 +24,6 @@ open class EndDrawerInterpoaltor: DrawerInterpolator {
 	init(lowerBound: CGFloat = 0, upperBound: CGFloat = 1, navigationView: UIView, overlayView: UIView) {
 		self.lowerBound = lowerBound
 		self.upperBound = upperBound
-		self.width = navigationView.bounds.width
 		self.navigationView = navigationView
 		self.overlayView = overlayView
 		
@@ -41,7 +39,7 @@ open class EndDrawerInterpoaltor: DrawerInterpolator {
 			// translate alpha
 			overlayView.alpha = p
 			// translate view
-			navigationView.transform = CGAffineTransform(translationX: width * t, y: 0)
+			navigationView.transform = CGAffineTransform(translationX: navigationView.bounds.width * t, y: 0)
 			// change state
 			drawerState = .draging
 			// will notify my drawer
@@ -55,9 +53,24 @@ open class EndDrawerInterpoaltor: DrawerInterpolator {
 		}
 	}
 	
+	public func animate(_ state: DrawerState) {
+		if state == .closed || state == .opened {
+			let t = state == .closed ? navigationView.bounds.width : 0
+			let p: CGFloat = state == .closed ? 0 : 1
+			
+			UIView.animate(withDuration: 0.3, animations: {
+				self.navigationView.transform = CGAffineTransform(translationX: t, y: 0)
+				self.overlayView.alpha = p
+			}) { _ in
+				self.drawerState = state
+				self.drawerDelegate?.drawerState(state, p)
+			}
+		}
+	}
+	
 	private func interpolateInternal(_ sender: UIPanGestureRecognizer) -> CGFloat {
 		let translation = sender.translation(in: nil)
-		let factor = translation.x / width
+		let factor = translation.x / navigationView.bounds.width
 		
 		let t = factor < 0 ? factor + 1: factor
 		return max(lowerBound, min(upperBound, t))
@@ -72,21 +85,6 @@ open class EndDrawerInterpoaltor: DrawerInterpolator {
 				return velocity.x < 0
 			case .draging:
 				return true
-		}
-	}
-	
-	private func animate(_ state: DrawerState) {
-		if state == .closed || state == .opened {
-			let t = state == .closed ? width : 0
-			let p: CGFloat = state == .closed ? 0 : 1
-			
-			UIView.animate(withDuration: 0.3, animations: {
-				self.navigationView.transform = CGAffineTransform(translationX: t, y: 0)
-				self.overlayView.alpha = p
-			}) { _ in
-				self.drawerState = state
-				self.drawerDelegate?.drawerState(state, p)
-			}
 		}
 	}
 	
