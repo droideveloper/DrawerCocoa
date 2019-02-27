@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-open class DrawerController: UIViewController {
+open class DrawerController: UIViewController, DrawerDelegate {
 	
 	open var navigationViewController: UIViewController? = nil
 	open var contentViewController: UIViewController? = nil
@@ -26,6 +26,8 @@ open class DrawerController: UIViewController {
 	}()
 	
 	private var interpolator: DrawerInterpolator = NoneDrawerInterpolator()
+	
+	private var state: DrawerState = .closed
 	
 	open override func viewDidLoad() {
 		super.viewDidLoad()
@@ -51,20 +53,19 @@ open class DrawerController: UIViewController {
 		overlayView.alpha = 0
 		// add navigation
 		addChild(navigationViewController)
-		let width = self.view.bounds.width
-		let halfWidth = width / 2
+		let width = UIScreen.main.bounds.width / 2
 		let height = self.view.bounds.height
 		if drawerGravity == .start {
-			navigationViewController.view.bounds = CGRect(x: 0, y: 0, width: halfWidth, height: height)
+			navigationViewController.view.bounds = CGRect(x: 0, y: 0, width: width, height: height)
 			navigationViewController.view.transform = CGAffineTransform(translationX: -width, y: 0)
 			let inter = StartDrawerInterpoaltor(navigationView: navigationViewController.view, overlayView: overlayView)
-			inter.drawerDelegate = drawerDelegate
+			inter.drawerDelegate = self
 			interpolator = inter
 		} else {
-			navigationViewController.view.bounds = CGRect(x: halfWidth, y: 0, width: halfWidth, height: height)
+			navigationViewController.view.bounds = CGRect(x: width, y: 0, width: width, height: height)
 			navigationViewController.view.transform = CGAffineTransform(translationX: width, y: 0)
 			let inter = EndDrawerInterpoaltor(navigationView: navigationViewController.view, overlayView: overlayView)
-			inter.drawerDelegate = drawerDelegate
+			inter.drawerDelegate = self
 			interpolator = inter
 		}
 		self.view.addSubview(navigationViewController.view)
@@ -76,5 +77,25 @@ open class DrawerController: UIViewController {
 	
 	@objc func pan(_ sender: UIPanGestureRecognizer) {
 		interpolator.interpolate(sender)
+	}
+	
+	public func closeDrawer() {
+		if isDrawerOpen() {
+			interpolator.animate(.closed)
+		}
+	}
+	
+	public func openDrawer() {
+		if !isDrawerOpen() {
+			interpolator.animate(.opened)
+		}
+	}
+	
+	public func drawerState(_ state: DrawerState, _ factor: CGFloat) {
+		self.state = state
+	}
+	
+	public func isDrawerOpen() -> Bool {
+		return state == .opened
 	}
 }

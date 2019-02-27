@@ -12,4 +12,7 @@ class NoneDrawerInterpolator: DrawerInterpolator {
 	
 	// does nothing
 	func interpolate(_ sender: UIPanGestureRecognizer) {}
+	
+	// does nothing
+	func animate(_ state: DrawerState) {}
 }
